@@ -1,0 +1,65 @@
+{
+  "name": "Corporate_Consulting_Theme",
+  "dataColors": [
+    "#0B1F3B", 
+    "#2C3E50", 
+    "#5C6B73", 
+    "#95A5A6", 
+    "#D32F2F", 
+    "#B71C1C", 
+    "#7F8C8D", 
+    "#BDC3C7"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#0B1F3B",
+  "tableAccent": "#0B1F3B",
+  "visualStyles": {
+    "*": {
+      "*": {
+        "title": [
+          {
+            "fontSize": 12,
+            "fontFamily": "Segoe UI Semibold",
+            "fontColor": "#0B1F3B",
+            "alignment": "left"
+          }
+        ],
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "border": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#E0E0E0"
+              }
+            },
+            "radius": 4
+          }
+        ]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#F4F5F7"
+              }
+            },
+            "transparency": 0
+          }
+        ]
+      }
+    }
+  }
+}

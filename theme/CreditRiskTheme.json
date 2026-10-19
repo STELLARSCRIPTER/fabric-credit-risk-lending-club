@@ -1,0 +1,26 @@
+{
+  "name": "Enterprise_Credit_Risk_Theme",
+  "dataColors": ["#1A365D", "#2B6CB0", "#4299E1", "#90CDF4", "#E53E3E", "#C53030", "#ED8936", "#DD6B20"],
+  "background": "#FFFFFF",
+  "foreground": "#1A365D",
+  "tableAccent": "#2B6CB0",
+  "visualStyles": {
+    "*": {
+      "*": {
+        "title": [
+          {
+            "fontSize": 12,
+            "fontFamily": "Segoe UI Semibold",
+            "fontColor": "#1A365D"
+          }
+        ],
+        "background": [
+          {
+            "color": "#FFFFFF",
+            "transparency": 0
+          }
+        ]
+      }
+    }
+  }
+}

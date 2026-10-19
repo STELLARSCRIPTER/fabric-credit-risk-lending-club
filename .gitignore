@@ -1,0 +1,35 @@
+﻿# Ignore raw data files (too large for GitHub)
+data/*
+!data/.gitkeep
+
+# Ignore environment variables
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+# Data folders
+data/*.csv
+data/*.gz
+data/*.parquet/
+venv/
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+# Python environment and cache
+venv/
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+
+# Large datasets and generated outputs
+data/*
+!data/.gitkeep
+
+# Environment secrets and OS files
+.env
+.DS_Store
+Thumbs.db
+
+# Java crash logs
+hs_err_pid*.log
