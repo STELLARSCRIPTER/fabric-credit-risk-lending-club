@@ -68,7 +68,6 @@ with col1:
 
 with col2:
     st.subheader("High-Risk Loan Volume Trend (by Year)")
-    # Extract year
     watchlist_df['Issue_Year'] = watchlist_df['issue_d'].dt.year
     
     trend_df = watchlist_df.groupby('Issue_Year', as_index=False)['loan_amnt'].count()
@@ -86,11 +85,9 @@ col3, col4 = st.columns(2)
 with col3:
     st.subheader("Geographic Concentration of High-Risk Loans")
     
-    # Group by state, sort, and get top 20
     state_df = watchlist_df.groupby('addr_state', as_index=False)['loan_amnt'].count()
     state_df.columns = ['addr_state', 'count']
     state_df = state_df.sort_values(by='count', ascending=False).head(20)
-    # Reverse for horizontal chart so largest is at top
     state_df = state_df.sort_values(by='count', ascending=True)
     
     fig_state = px.bar(state_df, x='count', y='addr_state', orientation='h', color_discrete_sequence=['#002060'])
@@ -100,7 +97,6 @@ with col3:
 with col4:
     st.subheader("Primary Drivers of High-Risk Loans (by Purpose)")
     
-    # Group by purpose, sort, and get top 10 (filtering out junk text)
     purpose_df = watchlist_df.groupby('purpose', as_index=False)['loan_amnt'].count()
     purpose_df.columns = ['purpose', 'count']
     purpose_df = purpose_df.sort_values(by='count', ascending=False).head(10)

@@ -3,10 +3,32 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
-from pathlib import Path
+import os
 
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="Executive Overview | Credit Risk", layout="wide", page_icon="📊")
+
+# --- ROBUST DATA PATH SETUP ---
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+if 'pages' in CURRENT_DIR:
+    ROOT_DIR = os.path.abspath(os.path.join(CURRENT_DIR, "..", ".."))
+else:
+    ROOT_DIR = os.path.abspath(os.path.join(CURRENT_DIR, ".."))
+
+data_path = os.path.join(ROOT_DIR, "data", "powerbi_credit_risk_predictions.csv")
+
+# --- LOAD DATA ---
+@st.cache_data
+def load_data():
+    df = pd.read_csv(data_path)
+    df['issue_d'] = pd.to_datetime(df['issue_d'], errors='coerce')
+    return df
+
+try:
+    df = load_data()
+except FileNotFoundError:
+    st.error(f"Data file not found at: {data_path}")
+    st.stop()
 
 # --- CUSTOM CSS ---
 st.markdown("""
@@ -23,22 +45,6 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
-
-# --- LOAD DATA ---
-# Going up one directory to find the data folder
-data_path = Path(__file__).parent.parent / "data" / "powerbi_credit_risk_predictions.csv"
-
-@st.cache_data
-def load_data():
-    df = pd.read_csv(data_path)
-    df['issue_d'] = pd.to_datetime(df['issue_d'], errors='coerce')
-    return df
-
-try:
-    df = load_data()
-except FileNotFoundError:
-    st.error("Data file not found. Please ensure the CSV is in the `data/` folder.")
-    st.stop()
 
 # --- HEADER & INTERACTIVE SLIDER ---
 col_header, col_slider = st.columns([2, 1])
@@ -119,7 +125,7 @@ with col_right:
     
     fig_int = px.bar(int_rate_df, x='int_rate_band', y='is_default', color_discrete_sequence=['#002060'])
     fig_int.add_hline(y=actual_def_rate/100, line_dash="dot", line_color="green", annotation_text=f"Avg: {actual_def_rate:.2f}%")
-    fig_int.update_layout(xaxis_title="", yaxis_title="Average Default Rate", yaxis_tickformat='%', margin=dict(l=0, r=0, t=10, b=0))
+    fig_int.update_layout(xaxis_title="", yaxis_title="Average Default Rate", yaxis_tickformat='.0%', margin=dict(l=0, r=0, t=10, b=0))
     st.plotly_chart(fig_int, use_container_width=True)
 
 st.divider()
@@ -129,9 +135,10 @@ col_fico, col_calib = st.columns(2)
 
 with col_fico:
     st.subheader("Risk Decreases as FICO Score Increases")
-    fico_df = df.groupby('fico_range_low', as_index=False).agg(Actual=('is_default', 'mean'), Predicted=('predicted_default_prob', 'mean'))
+    fico_df = df[(df['fico_range_low'] >= 600) & (df['fico_range_low'] <= 850)]
+    fico_df = fico_df.groupby('fico_range_low', as_index=False).agg(Actual=('is_default', 'mean'), Predicted=('predicted_default_prob', 'mean'))
     fig_fico = px.line(fico_df, x='fico_range_low', y=['Actual', 'Predicted'], color_discrete_sequence=['#002060', '#1f77b4'])
-    fig_fico.update_layout(yaxis_tickformat='%', legend=dict(x=0, y=1.1, orientation='h'), margin=dict(l=0, r=0, t=30, b=0))
+    fig_fico.update_layout(yaxis_tickformat='.0%', legend=dict(x=0, y=1.1, orientation='h'), margin=dict(l=0, r=0, t=30, b=0))
     st.plotly_chart(fig_fico, use_container_width=True)
 
 with col_calib:

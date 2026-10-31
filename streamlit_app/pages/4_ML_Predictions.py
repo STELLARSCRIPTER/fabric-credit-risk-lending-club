@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-import numpy as np
 import os
 
 # --- PAGE CONFIG ---
@@ -21,7 +20,6 @@ data_path = os.path.join(ROOT_DIR, "data", "powerbi_credit_risk_predictions.csv"
 @st.cache_data
 def load_data():
     df = pd.read_csv(data_path)
-    # Convert issue_d to datetime for the time series chart
     df['issue_d'] = pd.to_datetime(df['issue_d'], errors='coerce')
     return df
 
@@ -55,7 +53,6 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.subheader("Actual Default Rate by Issue Date")
-    # Group by month/year to get the trend
     df_time = df.dropna(subset=['issue_d']).copy()
     df_time['Issue_Year_Month'] = df_time['issue_d'].dt.to_period('M').astype(str)
     
@@ -72,7 +69,6 @@ with col1:
 
 with col2:
     st.subheader("Actual vs Predicted")
-    # Create bins
     df_calib = df.copy()
     bins = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7]
     labels = ['0.0', '0.1', '0.2', '0.3', '0.4', '0.5', '0.6']
@@ -104,14 +100,13 @@ col3, col4 = st.columns(2)
 with col3:
     st.subheader("Interest Rate vs. Predicted Default Risk")
     
-    # Plotly can struggle with hundreds of thousands of dots. We sample 10,000 for speed.
     df_scatter = df.sample(n=min(10000, len(df)), random_state=42)
     
     fig_scatter = px.scatter(
         df_scatter, 
         x='int_rate', 
         y='predicted_default_prob',
-        color='verification_status', # Matches the colors in your PBI legend
+        color='verification_status',
         opacity=0.6,
         color_discrete_sequence=px.colors.qualitative.Pastel
     )
@@ -127,7 +122,6 @@ with col3:
 with col4:
     st.subheader("Risk Distribution Histogram")
     
-    # Add a toggle for the verification status to match your PBI slicer
     verif_options = df['verification_status'].unique().tolist()
     selected_verif = st.multiselect("Filter by Verification Status", verif_options, default=verif_options)
     
@@ -136,7 +130,7 @@ with col4:
     fig_hist = px.histogram(
         df_hist, 
         x='predicted_default_prob', 
-        nbins=30, # Adjust based on how granular you want it
+        nbins=30,
         color_discrete_sequence=['#002060']
     )
     fig_hist.update_layout(

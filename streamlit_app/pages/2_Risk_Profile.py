@@ -43,7 +43,7 @@ with col1:
 with col2:
     st.metric("Weighted Avg Risk", f"{weighted_avg_risk:.2f}%")
 with col3:
-    st.metric("High-Risk Exposure", "0.28%") # From PBI dashboard
+    st.metric("High-Risk Exposure", "0.28%")
 with col4:
     st.metric("Actual Default Rate", f"{actual_def_rate:.2f}%")
 
@@ -63,7 +63,7 @@ with col1:
 
 with col2:
     st.subheader("Model Risk by DTI Band")
-    # Create DTI Bands (using your labels from the screenshot)
+    # Create DTI Bands
     bins = [-10, 0, 10, 20, 30, 40, 50, 60, 100]
     labels = ['<0', '0-10', '10-20', '20-30', '30-40', '40-50', '50-60', '60+']
     
