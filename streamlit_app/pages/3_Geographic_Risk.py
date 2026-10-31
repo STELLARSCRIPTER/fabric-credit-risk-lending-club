@@ -7,11 +7,12 @@ import os
 st.set_page_config(page_title="Geographic Risk", layout="wide", page_icon="🗺️")
 
 # --- ROBUST DATA PATH SETUP ---
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-if 'pages' in BASE_DIR:
-    ROOT_DIR = os.path.dirname(BASE_DIR)
-else:
-    ROOT_DIR = BASE_DIR
+# --- ROBUST DATA PATH SETUP ---
+# Get the absolute path of the current file
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Go up two directories to reach the root of the repo (fabric-credit-risk-lending-club)
+ROOT_DIR = os.path.abspath(os.path.join(CURRENT_DIR, "..", ".."))
 
 data_path = os.path.join(ROOT_DIR, "data", "powerbi_credit_risk_predictions.csv")
 

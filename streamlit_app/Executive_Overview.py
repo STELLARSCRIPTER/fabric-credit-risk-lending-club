@@ -9,11 +9,13 @@ import os
 st.set_page_config(page_title="Executive Overview | Credit Risk", layout="wide", page_icon="📊")
 
 # --- ROBUST DATA PATH SETUP ---
+# Get the directory where the script is located
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-if 'pages' in CURRENT_DIR:
-    ROOT_DIR = os.path.abspath(os.path.join(CURRENT_DIR, "..", ".."))
-else:
-    ROOT_DIR = os.path.abspath(os.path.join(CURRENT_DIR, ".."))
+# Get the parent directory (the root of the repo)
+ROOT_DIR = os.path.dirname(CURRENT_DIR)
+# If the script is inside the 'pages' folder, go up one more level
+if os.path.basename(CURRENT_DIR) == 'pages':
+    ROOT_DIR = os.path.dirname(ROOT_DIR)
 
 data_path = os.path.join(ROOT_DIR, "data", "powerbi_credit_risk_predictions.csv")
 
