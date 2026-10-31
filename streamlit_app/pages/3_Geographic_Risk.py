@@ -1,19 +1,30 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-from pathlib import Path
+import os
 
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="Geographic Risk", layout="wide", page_icon="🗺️")
 
-# --- LOAD DATA ---
-data_path = Path(__file__).parent.parent.parent / "data" / "powerbi_credit_risk_predictions.csv"
+# --- ROBUST DATA PATH SETUP ---
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+if 'pages' in BASE_DIR:
+    ROOT_DIR = os.path.dirname(BASE_DIR)
+else:
+    ROOT_DIR = BASE_DIR
 
+data_path = os.path.join(ROOT_DIR, "data", "powerbi_credit_risk_predictions.csv")
+
+# --- LOAD DATA FUNCTION ---
 @st.cache_data
 def load_data():
     return pd.read_csv(data_path)
 
-df = load_data()
+try:
+    df = load_data()
+except FileNotFoundError:
+    st.error(f"Data file not found at: {data_path}")
+    st.stop()
 
 # --- HEADER ---
 st.markdown("<h2 style='color: #002060; margin-bottom: 0;'>Geographic Risk Profile</h2>", unsafe_allow_html=True)
